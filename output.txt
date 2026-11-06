@@ -1,0 +1,18 @@
+1. Sign up a throwaway user
+   status: 200
+   session_token cookie Max-Age: 604800 (7 days)
+   session expires in: 7.00 days
+
+2. Sign in and ask for 30 days (Better Auth has no such request field, so it is ignored)
+   session_token cookie Max-Age: 604800 (7 days)
+   session expires in: 7.00 days
+
+3. Try to push expiresAt out with /update-session (core fields are not accepted)
+   status: 400 {"message":"No fields to update"}
+   session expires in: 7.00 days
+
+4. rememberMe: false is the only lever, and it only makes sessions shorter
+   session expires in: 1.00 days
+
+Result: sessions are capped at 7 days. Neon exposes no session.expiresIn setting
+(API, CLI, Console or MCP), so an app cannot keep users signed in longer.
